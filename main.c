@@ -14,13 +14,14 @@ typedef struct nodoArbol
 }nodoArbol;
 
 void insertar (nodoArbol **raiz,int dato);
-nodoArbol *buscarNumero (nodoArbol **raiz,int dato);
+nodoArbol *buscarNumero (nodoArbol **raiz,nodoArbol **padre,int dato);
 void borrarNodo (nodoArbol **nodo,int dato);
 void orden(nodoArbol *raiz);
 
 int main()
 {
     nodoArbol *raiz = NULL;
+    nodoArbol *padre = NULL; //Apuntador auxiliar para apuntar al padre del hijo que se desea borrar
     int opcion = 0;
     int dato;
     do
@@ -62,7 +63,7 @@ int main()
                     system("cls");
                     printf("INGRESA DATO -> ");
                     scanf("%d",&dato);
-                    buscarNumero(&raiz,dato);
+                    buscarNumero(&raiz,&padre,dato);
                 }
                 else
                 {
@@ -78,7 +79,7 @@ int main()
                     system("cls");
                     printf("INGRESA DATO -> ");
                     scanf("%d",&dato);
-                    aux = buscarNumero(&raiz,dato);
+                    aux = buscarNumero(&raiz,&padre,dato);
                     borrarNodo(&aux,dato);
                 }
                 else
@@ -123,8 +124,8 @@ void borrarNodo (nodoArbol **nodo,int dato)         // AUN NO FUNCIONA
 {
     if((*nodo)->der == NULL && (*nodo)->izq == NULL)
     {
-
-        return free(nodo);
+        *nodo = NULL;
+        return free(*nodo);
     }
     else if((*nodo)->der != NULL)
         return borrarNodo(&((*nodo)->der),dato);
@@ -164,32 +165,42 @@ void insertar (nodoArbol **raiz,int dato)
         anterior->izq = nodoNuevo;
 }
 
-nodoArbol *buscarNumero (nodoArbol **raiz,int dato)
+nodoArbol *buscarNumero (nodoArbol **raiz,nodoArbol **padre,int dato)
 {
     nodoArbol *actual = NULL;
+    if (*padre == NULL)
+        *padre = (nodoArbol*)malloc(sizeof(nodoArbol));
+
     if(dato != (*raiz)->dato)
     {
         actual = *raiz;
-        while(actual != NULL)
+        while((actual != NULL) && (actual->dato != dato))
         {
+            *padre = actual;
             if(dato > actual->dato)
                 actual = actual ->der;
-            else if (dato == actual->dato)
-            {
-                printf("SE ENCONTRO, DIRECCION = [%p]\n",actual);
-                system("pause");
-                return actual;
-            }
             else
                 actual = actual->izq;
         }
+        if(actual == NULL)
+        {
             printf("NO SE ENCONTRO\n");
             system("pause");
+        }
+        else
+        {
+            printf("SE ENCONTRO\n");
+            printf("PADRE -> DIRECCION = [%p]\n",*padre);
+            printf("BUSCADO -> DIRECCION = [%p]\n",actual);
+            system("pause");
+            return actual;
+        }
     }
     else
     {
         printf("VALOR ESTA EN RAIZ\n");
         system("pause");
+        return *raiz;
     }
     return NULL;
 }
