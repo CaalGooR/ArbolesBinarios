@@ -80,16 +80,8 @@ int main()
                     printf("INGRESA DATO -> ");
                     scanf("%d",&dato);
                     aux = buscarNumero(&raiz,&padre,dato);
-                    printf("AUX = [%p]\n",aux);
-                    system("pause");
-                    if (dato == raiz->dato)
-                        {
-                            raiz = NULL;
-                            free(raiz);
-                        }
-                    else if (aux != NULL)
+                    if (aux != NULL)
                         borrarNodo(&aux,&padre,dato);
-
                 }
                 else
                 {
@@ -135,7 +127,7 @@ void borrarNodo (nodoArbol **nodo,nodoArbol **padre,int dato)         // AUN NO 
 {
     if((*nodo)->der == NULL && (*nodo)->izq == NULL)
     {
-        if ((*padre)->der == (*nodo))
+        if ((*padre)->der) == (*nodo))
         {
                 printf("Derecha");
                 system("pause");
@@ -149,9 +141,9 @@ void borrarNodo (nodoArbol **nodo,nodoArbol **padre,int dato)         // AUN NO 
         }
         free(*nodo);
     }
-    else if((*nodo)->der != NULL && (*nodo)->izq == NULL)
+    else if((*nodo)->der != NULL)
         return borrarNodo(&((*nodo)->der),padre,dato);
-    else if((*nodo)->izq != NULL && (*nodo)->der == NULL)
+    else if((*nodo)->izq != NULL)
         return borrarNodo(&((*nodo)->izq),padre,dato);
 }
 
@@ -220,7 +212,7 @@ nodoArbol *buscarNumero (nodoArbol **raiz,nodoArbol **padre,int dato)
     }
     else
     {
-        printf("VALOR ESTA EN RAIZ =[%p]\n",*raiz);
+        printf("VALOR ESTA EN RAIZ\n");
         system("pause");
         return *raiz;
     }
